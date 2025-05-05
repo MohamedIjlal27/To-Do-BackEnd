@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   api:
     build:
@@ -13,11 +11,11 @@ services:
       mysql:
         condition: service_healthy
     environment:
-      - DATABASE_HOST=mysql
-      - DATABASE_PORT=3306
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=root
-      - DATABASE_NAME=mydb
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      DATABASE_USER: root
+      DATABASE_PASSWORD: root
+      DATABASE_NAME: mydb
     networks:
       - nest_network
 
@@ -28,21 +26,21 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=mydb
+      MYSQL_ROOT_PASSWORD: root  # <-- Changed to key:value format
+      MYSQL_DATABASE: mydb
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
       - nest_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]  # <-- Hardcode password temporarily
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
 networks:
   nest_network:
     driver: bridge
 
 volumes:
-  mysql_data: 
+  mysql_data:
