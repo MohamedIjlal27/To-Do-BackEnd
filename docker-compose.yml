@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   api:
     build:
@@ -6,7 +8,7 @@ services:
     container_name: nest_api
     restart: always
     ports:
-      - "30001:3001"
+      - "3001:3001"
     depends_on:
       mysql:
         condition: service_healthy
@@ -26,14 +28,14 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: root  # <-- Changed to key:value format
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: mydb
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
       - nest_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]  # <-- Hardcode password temporarily
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
       interval: 10s
       timeout: 10s
       retries: 10
