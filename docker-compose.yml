@@ -8,37 +8,41 @@ services:
     container_name: nest_api
     restart: always
     ports:
-      - "3000:3000"
+      - "30001:3001"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       - DATABASE_HOST=mysql
       - DATABASE_PORT=3306
-      - DATABASE_USER=nest_user
-      - DATABASE_PASSWORD=nest_password
-      - DATABASE_NAME=nest_db
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_NAME=mydb
     networks:
       - nest_network
 
   mysql:
     image: mysql:8.0
-    container_name: nest_mysql
+    container_name: mysql-container
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: nest_db
-      MYSQL_USER: nest_user
-      MYSQL_PASSWORD: nest_password
     ports:
       - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mydb
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
       - nest_network
-
-volumes:
-  mysql_data:
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 networks:
   nest_network:
-    driver: bridge 
+    driver: bridge
+
+volumes:
+  mysql_data: 
