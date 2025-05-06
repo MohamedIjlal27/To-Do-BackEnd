@@ -5,16 +5,16 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './entities/todo.entity';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 
-@ApiTags('todos')
-@Controller('todos')
+@ApiTags('tasks')
+@Controller('tasks')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
-  @Post()
-  @ApiOperation({ summary: 'Create a new todo task' })
+  @Post('create')
+  @ApiOperation({ summary: 'Create a new task' })
   @ApiResponse({ 
     status: HttpStatus.CREATED, 
-    description: 'The todo task has been successfully created.',
+    description: 'The task has been successfully created.',
     type: Todo 
   })
   @ApiResponse({ 
@@ -25,44 +25,44 @@ export class TodosController {
     return this.todosService.create(createTodoDto);
   }
 
-  @Get()
-  @ApiOperation({ summary: 'Get all todo tasks' })
+  @Get('list')
+  @ApiOperation({ summary: 'Get all tasks' })
   @ApiResponse({ 
     status: HttpStatus.OK, 
-    description: 'Return all todo tasks.',
+    description: 'Return all tasks.',
     type: [Todo]
   })
   findAll(): Promise<Todo[]> {
     return this.todosService.findAll();
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Get a todo task by id' })
-  @ApiParam({ name: 'id', description: 'The id of the todo task' })
+  @Get('view/:id')
+  @ApiOperation({ summary: 'Get a task by id' })
+  @ApiParam({ name: 'id', description: 'The id of the task' })
   @ApiResponse({ 
     status: HttpStatus.OK, 
-    description: 'Return the todo task.',
+    description: 'Return the task.',
     type: Todo 
   })
   @ApiResponse({ 
     status: HttpStatus.NOT_FOUND, 
-    description: 'Todo task not found.' 
+    description: 'Task not found.' 
   })
   findOne(@Param('id', ParseIntPipe) id: number): Promise<Todo> {
     return this.todosService.findOne(id);
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update a todo task' })
-  @ApiParam({ name: 'id', description: 'The id of the todo task' })
+  @Patch('edit/:id')
+  @ApiOperation({ summary: 'Update a task' })
+  @ApiParam({ name: 'id', description: 'The id of the task' })
   @ApiResponse({ 
     status: HttpStatus.OK, 
-    description: 'The todo task has been successfully updated.',
+    description: 'The task has been successfully updated.',
     type: Todo 
   })
   @ApiResponse({ 
     status: HttpStatus.NOT_FOUND, 
-    description: 'Todo task not found.' 
+    description: 'Task not found.' 
   })
   @ApiResponse({ 
     status: HttpStatus.BAD_REQUEST, 
@@ -75,16 +75,16 @@ export class TodosController {
     return this.todosService.update(id, updateTodoDto);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete a todo task' })
-  @ApiParam({ name: 'id', description: 'The id of the todo task' })
+  @Delete('remove/:id')
+  @ApiOperation({ summary: 'Delete a task' })
+  @ApiParam({ name: 'id', description: 'The id of the task' })
   @ApiResponse({ 
     status: HttpStatus.NO_CONTENT, 
-    description: 'The todo task has been successfully deleted.' 
+    description: 'The task has been successfully deleted.' 
   })
   @ApiResponse({ 
     status: HttpStatus.NOT_FOUND, 
-    description: 'Todo task not found.' 
+    description: 'Task not found.' 
   })
   remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.todosService.remove(id);
