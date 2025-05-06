@@ -13,12 +13,16 @@ export class TodosService {
   ) {}
 
   async create(createTodoDto: CreateTodoDto): Promise<Todo> {
-    const todo = this.todosRepository.create(createTodoDto);
+    const todo = this.todosRepository.create({
+      ...createTodoDto,
+      status: createTodoDto.status || 'pending'
+    });
     return await this.todosRepository.save(todo);
   }
 
   async findAll(): Promise<Todo[]> {
     return await this.todosRepository.find({
+      where: { status: 'pending' },
       order: {
         createdAt: 'DESC',
       },
@@ -36,6 +40,12 @@ export class TodosService {
   async update(id: number, updateTodoDto: UpdateTodoDto): Promise<Todo> {
     const todo = await this.findOne(id);
     Object.assign(todo, updateTodoDto);
+    return await this.todosRepository.save(todo);
+  }
+
+  async markAsCompleted(id: number): Promise<Todo> {
+    const todo = await this.findOne(id);
+    todo.status = 'completed';
     return await this.todosRepository.save(todo);
   }
 

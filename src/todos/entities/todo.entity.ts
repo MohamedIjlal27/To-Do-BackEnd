@@ -25,6 +25,18 @@ export class Todo {
   description: string;
 
   @ApiProperty({
+    description: 'The status of the task',
+    example: 'pending',
+    enum: ['pending', 'completed']
+  })
+  @Column({
+    type: 'enum',
+    enum: ['pending', 'completed'],
+    default: 'pending'
+  })
+  status: 'pending' | 'completed';
+
+  @ApiProperty({
     description: 'The date when the task was created',
     example: '2024-05-05T12:00:00Z',
   })

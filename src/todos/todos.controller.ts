@@ -26,10 +26,10 @@ export class TodosController {
   }
 
   @Get('list')
-  @ApiOperation({ summary: 'Get all tasks' })
+  @ApiOperation({ summary: 'Get all pending tasks' })
   @ApiResponse({ 
     status: HttpStatus.OK, 
-    description: 'Return all tasks.',
+    description: 'Return all pending tasks.',
     type: [Todo]
   })
   findAll(): Promise<Todo[]> {
@@ -73,6 +73,22 @@ export class TodosController {
     @Body() updateTodoDto: UpdateTodoDto,
   ): Promise<Todo> {
     return this.todosService.update(id, updateTodoDto);
+  }
+
+  @Patch('complete/:id')
+  @ApiOperation({ summary: 'Mark a task as completed' })
+  @ApiParam({ name: 'id', description: 'The id of the task' })
+  @ApiResponse({ 
+    status: HttpStatus.OK, 
+    description: 'The task has been successfully marked as completed.',
+    type: Todo 
+  })
+  @ApiResponse({ 
+    status: HttpStatus.NOT_FOUND, 
+    description: 'Task not found.' 
+  })
+  markAsCompleted(@Param('id', ParseIntPipe) id: number): Promise<Todo> {
+    return this.todosService.markAsCompleted(id);
   }
 
   @Delete('remove/:id')
