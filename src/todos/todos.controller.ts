@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpStatus, Query } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todo } from './entities/todo.entity';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @ApiTags('tasks')
 @Controller('tasks')
@@ -26,14 +26,20 @@ export class TodosController {
   }
 
   @Get('list')
-  @ApiOperation({ summary: 'Get all pending tasks' })
+  @ApiOperation({ summary: 'Get pending tasks with optional limit' })
+  @ApiQuery({ 
+    name: 'limit', 
+    required: false, 
+    type: Number,
+    description: 'Number of tasks to return (default: all tasks)'
+  })
   @ApiResponse({ 
     status: HttpStatus.OK, 
-    description: 'Return all pending tasks.',
+    description: 'Return pending tasks.',
     type: [Todo]
   })
-  findAll(): Promise<Todo[]> {
-    return this.todosService.findAll();
+  findAll(@Query('limit') limit?: number): Promise<Todo[]> {
+    return this.todosService.findAll(limit);
   }
 
   @Get('view/:id')

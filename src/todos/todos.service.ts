@@ -20,13 +20,17 @@ export class TodosService {
     return await this.todosRepository.save(todo);
   }
 
-  async findAll(): Promise<Todo[]> {
-    return await this.todosRepository.find({
-      where: { status: 'pending' },
-      order: {
-        createdAt: 'DESC',
-      },
-    });
+  async findAll(limit?: number): Promise<Todo[]> {
+    const queryBuilder = this.todosRepository
+      .createQueryBuilder('todo')
+      .where('todo.status = :status', { status: 'pending' })
+      .orderBy('todo.createdAt', 'DESC');
+
+    if (limit) {
+      queryBuilder.take(limit);
+    }
+
+    return await queryBuilder.getMany();
   }
 
   async findOne(id: number): Promise<Todo> {
