@@ -25,38 +25,6 @@ export class Todo {
   description: string;
 
   @ApiProperty({
-    description: 'The status of the task',
-    example: 'pending',
-    enum: ['pending', 'in_progress', 'completed'],
-  })
-  @Column({
-    type: 'enum',
-    enum: ['pending', 'in_progress', 'completed'],
-    default: 'pending'
-  })
-  status: string;
-
-  @ApiProperty({
-    description: 'The priority of the task',
-    example: 'high',
-    enum: ['low', 'medium', 'high'],
-  })
-  @Column({
-    type: 'enum',
-    enum: ['low', 'medium', 'high'],
-    default: 'medium'
-  })
-  priority: string;
-
-  @ApiProperty({
-    description: 'The due date of the task',
-    example: '2024-05-10T00:00:00Z',
-    required: false,
-  })
-  @Column({ type: 'datetime', nullable: true })
-  dueDate: Date;
-
-  @ApiProperty({
     description: 'The date when the task was created',
     example: '2024-05-05T12:00:00Z',
   })
