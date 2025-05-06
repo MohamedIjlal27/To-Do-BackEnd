@@ -21,6 +21,81 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+# Todo API
+
+A NestJS-based REST API for managing todo items with MySQL database.
+
+## Features
+
+- CRUD operations for todo items
+- Swagger API documentation
+- MySQL database integration
+- Environment-based configuration
+- Input validation
+- TypeORM for database operations
+
+## Prerequisites
+
+- Node.js (v20 or later)
+- Docker and Docker Compose
+- MySQL (if running locally)
+
+## Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+# Database Configuration
+DATABASE_HOST=mysql
+DATABASE_PORT=3306
+DATABASE_USER=root
+DATABASE_PASSWORD=root
+DATABASE_NAME=mydb
+
+# Application Configuration
+PORT=3001
+NODE_ENV=development
+```
+
+## Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the application with Docker:
+   ```bash
+   docker-compose up -d
+   ```
+
+## API Documentation
+
+Once the application is running, you can access the Swagger documentation at:
+```
+http://localhost:3001/api
+```
+
+## API Endpoints
+
+- `POST /todos` - Create a new todo
+- `GET /todos` - Get all todos
+- `GET /todos/:id` - Get a specific todo
+- `PATCH /todos/:id` - Update a todo
+- `DELETE /todos/:id` - Delete a todo
+
+## Development
+
+The application uses TypeORM for database operations. In development mode, the database schema will be automatically synchronized with the entities.
+
+## Production
+
+For production deployment:
+1. Set `NODE_ENV=production` in your environment variables
+2. Set `synchronize: false` in the TypeORM configuration
+3. Use proper database credentials
+4. Enable proper security measures (HTTPS, rate limiting, etc.)
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
